@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 
 import Header from './components/Header'
 import Map from './components/Map'
+import Search from './components/Search'
 
 import awsconfig from './aws-exports';
 
@@ -15,6 +16,7 @@ import { createMap } from "maplibre-gl-js-amplify";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { drawPoints } from "maplibre-gl-js-amplify";
 
+import { Geo } from "aws-amplify"
 
 Amplify.configure(awsconfig);
 
@@ -25,6 +27,7 @@ const INITIAL_VIEWPORT = {
   longitude: -56.164532,
   latitude: -34.901112,
 }
+
 
 function addStoreLocations(map, stores) {
   map.on("load", function () {
@@ -88,12 +91,32 @@ const App = () => {
 
     initializeMap();
 
+    return function cleanup() {
+      console.log('remove')
+      map.remove();
+    }
+
 }, []);
+
+const searchPlace = async (place) => {
+
+  const results = await Geo.searchByText(place);
+
+  console.log(results);
+
+  const coordinates = results[0].geometry.point
+
+  map.setCenter(coordinates);
+  map.setZoom(16);
+  
+}
 
   return (
     <AmplifyAuthenticator>
       <div className="App">
         <Header />
+        <Search searchPlace={searchPlace}/>
+        <br/>
         <Map myMap={map}/>
       </div>
     </AmplifyAuthenticator>
