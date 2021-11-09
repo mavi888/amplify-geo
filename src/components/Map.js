@@ -1,11 +1,10 @@
 
-
 function Map(props) {
-    console.log(props.myMap)
+   
     return (
         <div className="container">
-            <div id="map">
-            </div>
+          <div id="map">
+          </div>
         </div>
     );
   }
