@@ -51,3 +51,4 @@ amplify/.config/project-config.json
 package-lock.json
 yarn.lock
 amplify/hooks/README.md
+yarn.lock
